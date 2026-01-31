@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BACKUP_DIR="/var/backups/postgres"
+BACKUP_DIR="$HOME/pg_backups"
 DATE=$(date +%F_%H-%M)
 
 mkdir -p $BACKUP_DIR

@@ -27,6 +27,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
+          export PGPASSWORD=${{ secrets.DB_PASSWORD }}
           cd pg-automation
           chmod +x scripts/*.sh
           ./scripts/backup_db.sh
