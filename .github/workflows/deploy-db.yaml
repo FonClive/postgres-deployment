@@ -1,0 +1,33 @@
+name: PostgreSQL Update Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  update-db:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Copy scripts to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "scripts,migrations"
+        target: "/home/ubuntu/pg-automation"
+
+    - name: Run DB update
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd pg-automation
+          ./scripts/backup_db.sh
+          ./scripts/migrate_db.sh
+          ./scripts/health_check.sh
