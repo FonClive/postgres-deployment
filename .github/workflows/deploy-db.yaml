@@ -28,6 +28,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           cd pg-automation
+          chmod +x scripts/*.sh
           ./scripts/backup_db.sh
           ./scripts/migrate_db.sh
           ./scripts/health_check.sh
